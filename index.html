@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROGRAMA NFL — FUERZA & ATLETISMO</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --dark: #111111;
+    --card: #161616;
+    --border: #222222;
+    --gold: #c9a227;
+    --gold-light: #e8c547;
+    --red: #c0392b;
+    --green: #27ae60;
+    --blue: #2980b9;
+    --text: #e8e8e8;
+    --muted: #777;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    background: var(--black);
+    padding: 60px 20px 40px;
+    text-align: center;
+    border-bottom: 3px solid var(--gold);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(201,162,39,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--black);
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 3px;
+    font-size: 11px;
+    padding: 4px 16px;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 10vw, 100px);
+    letter-spacing: 4px;
+    line-height: 0.9;
+    color: #fff;
+  }
+
+  .hero h1 span {
+    color: var(--gold);
+    display: block;
+  }
+
+  .hero-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-top: 16px;
+    text-transform: uppercase;
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 36px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* NAV TABS */
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    background: var(--dark);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 18px 8px;
+    text-align: center;
+    cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    position: relative;
+    top: 2px;
+  }
+
+  .tab:hover { color: var(--text); }
+
+  .tab.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  .tab .day-tag {
+    display: block;
+    font-family: 'Barlow', sans-serif;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    font-weight: 400;
+    margin-bottom: 2px;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 16px 60px;
+  }
+
+  .day-panel { display: none; }
+  .day-panel.active { display: block; }
+
+  /* DAY HEADER */
+  .day-header {
+    padding: 36px 0 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .day-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    letter-spacing: 2px;
+    line-height: 1;
+    color: #fff;
+  }
+
+  .day-title span { color: var(--gold); }
+
+  .day-focus {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .day-meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .meta-chip {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .meta-chip strong { color: var(--gold); }
+
+  /* BLOCK / SECTION */
+  .block {
+    margin-bottom: 32px;
+  }
+
+  .block-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .block-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--gold);
+    line-height: 1;
+    min-width: 32px;
+  }
+
+  .block-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: #fff;
+  }
+
+  .block-sub {
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .block-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* EXERCISE TABLE */
+  .exercise-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .exercise-table thead tr {
+    background: var(--border);
+  }
+
+  .exercise-table thead th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 8px 14px;
+    text-align: left;
+    font-weight: 600;
+  }
+
+  .exercise-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+
+  .exercise-table tbody tr:hover {
+    background: rgba(201,162,39,0.04);
+  }
+
+  .exercise-table td {
+    padding: 14px;
+    vertical-align: top;
+  }
+
+  .ex-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+  }
+
+  .ex-note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 3px;
+    font-style: italic;
+  }
+
+  .ex-sets {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--gold);
+  }
+
+  .ex-reps {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .ex-rest {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .badge-fallo { background: rgba(192,57,43,0.2); color: #e74c3c; border: 1px solid rgba(192,57,43,0.4); }
+  .badge-explosivo { background: rgba(39,174,96,0.15); color: #2ecc71; border: 1px solid rgba(39,174,96,0.3); }
+  .badge-hipertrofia { background: rgba(41,128,185,0.15); color: #3498db; border: 1px solid rgba(41,128,185,0.3); }
+  .badge-potencia { background: rgba(201,162,39,0.15); color: var(--gold); border: 1px solid rgba(201,162,39,0.3); }
+
+  /* WARMUP / NOTES BOX */
+  .info-box {
+    background: var(--card);
+    border-left: 3px solid var(--gold);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .info-box strong {
+    color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+    color: var(--gold);
+  }
+
+  .info-box ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .info-box ul li::before {
+    content: '→ ';
+    color: var(--gold);
+  }
+
+  /* SUPERSET indicator */
+  .superset-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+    padding: 4px 14px;
+    background: rgba(201,162,39,0.06);
+    border-left: 2px solid var(--gold);
+    margin: -1px 0 0 0;
+  }
+
+  /* FINISHER */
+  .finisher-box {
+    background: linear-gradient(135deg, rgba(192,57,43,0.12), rgba(201,162,39,0.06));
+    border: 1px solid rgba(192,57,43,0.3);
+    padding: 20px;
+    margin-top: 8px;
+  }
+
+  .finisher-box h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #e74c3c;
+    margin-bottom: 10px;
+  }
+
+  .finisher-box p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .finisher-box p strong { color: var(--text); }
+
+  /* PHILOSOPHY SECTION */
+  .philosophy {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 28px;
+    margin-bottom: 32px;
+  }
+
+  .philosophy h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+
+  .philosophy p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .philosophy p:last-child { margin-bottom: 0; }
+
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .principle {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    padding: 16px;
+  }
+
+  .principle-icon {
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+
+  .principle h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+
+  .principle p {
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 28px 0;
+  }
+
+  /* ===== SERIES TRACKER ===== */
+  .series-tracker {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .series-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .series-row:hover {
+    background: rgba(201,162,39,0.06);
+    border-color: rgba(201,162,39,0.3);
+  }
+
+  .series-row.done {
+    background: rgba(39,174,96,0.08);
+    border-color: rgba(39,174,96,0.3);
+  }
+
+  .series-row.resting {
+    background: rgba(201,162,39,0.1);
+    border-color: var(--gold);
+    cursor: default;
+  }
+
+  .series-check {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 12px;
+    transition: all 0.2s;
+  }
+
+  .series-row.done .series-check {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+  }
+
+  .series-row.resting .series-check {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--black);
+    font-size: 10px;
+  }
+
+  .series-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    min-width: 52px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .series-row.done .series-label { color: var(--green); }
+  .series-row.resting .series-label { color: var(--gold); }
+
+  .series-reps-tag {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 17px;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .series-row.done .series-reps-tag {
+    text-decoration: line-through;
+    color: var(--muted);
+  }
+
+  .series-timer-inline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--gold);
+    min-width: 44px;
+    text-align: right;
+    display: none;
+  }
+
+  .series-row.resting .series-timer-inline { display: block; }
+
+  .series-reset-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 13px;
+    padding: 2px 4px;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    display: none;
+    margin-left: auto;
+  }
+
+  .series-reset-btn:hover { opacity: 1; color: #e74c3c; }
+
+  .series-row.done .series-reset-btn { display: block; }
+  .series-row.resting .series-reset-btn { display: none !important; }
+
+  /* Progress bar under each exercise */
+  .ex-progress-bar {
+    height: 2px;
+    background: var(--border);
+    margin-top: 8px;
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .ex-progress-fill {
+    height: 100%;
+    background: var(--green);
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  /* ===== GLOBAL REST TIMER OVERLAY ===== */
+  #timer-overlay {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    background: var(--dark);
+    border: 2px solid var(--gold);
+    padding: 16px 20px;
+    min-width: 200px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+    display: none;
+    animation: slideIn 0.3s ease;
+  }
+
+  #timer-overlay.visible { display: block; }
+
+  @keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  #timer-overlay-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  #timer-overlay-ex {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 220px;
+  }
+
+  #timer-overlay-time {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    color: var(--gold);
+    line-height: 1;
+    letter-spacing: 2px;
+  }
+
+  #timer-overlay-time.urgent { color: #e74c3c; animation: pulse 0.5s infinite; }
+
+  @keyframes pulse {
+    0%,100% { opacity: 1; } 50% { opacity: 0.5; }
+  }
+
+  #timer-overlay-bar {
+    height: 3px;
+    background: var(--border);
+    margin-top: 10px;
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  #timer-overlay-bar-fill {
+    height: 100%;
+    background: var(--gold);
+    width: 100%;
+    transition: width 1s linear;
+  }
+
+  #timer-overlay-bar-fill.urgent { background: #e74c3c; }
+
+  #timer-overlay-skip {
+    display: block;
+    margin-top: 10px;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s;
+  }
+
+  #timer-overlay-skip:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* Done flash */
+  .ex-done-flash {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-top: 6px;
+    display: none;
+  }
+
+  .ex-done-flash.visible { display: block; }
+
+  @media (max-width: 600px) {
+    #timer-overlay { bottom: 12px; right: 12px; left: 12px; min-width: unset; }
+  }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 52px; }
+    .exercise-table thead { display: none; }
+    .exercise-table td { display: block; padding: 6px 14px; }
+    .exercise-table tr { display: block; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .exercise-table td:first-child { padding-top: 12px; }
+    .tab { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Programa Élite</div>
+  <h1>FUERZA<span>& ATLETISMO</span></h1>
+  <p class="hero-sub">Máximo volumen · Máxima explosividad · Estilo NFL</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">días gym</div></div>
+    <div class="stat"><div class="stat-num">90</div><div class="stat-label">min/sesión</div></div>
+    <div class="stat"><div class="stat-num">2</div><div class="stat-label">días tenis</div></div>
+    <div class="stat"><div class="stat-num">NFL</div><div class="stat-label">filosofía</div></div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="showDay('lunes')">
+    <span class="day-tag">Lunes</span>
+    PECHO &amp; HOMBROS
+  </div>
+  <div class="tab" onclick="showDay('miercoles')">
+    <span class="day-tag">Miércoles</span>
+    ESPALDA &amp; BÍCEPS
+  </div>
+  <div class="tab" onclick="showDay('viernes')">
+    <span class="day-tag">Viernes</span>
+    PIERNAS &amp; GLÚTEOS
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ===================== LUNES ===================== -->
+<div class="day-panel active" id="lunes">
+  <div class="day-header">
+    <div>
+      <div class="day-title">PECHO <span>&</span> HOMBROS</div>
+      <div class="day-title" style="font-size:28px; color: var(--muted);">+ TRÍCEPS · CORE</div>
+      <div class="day-focus">Masa máxima · Anchura · Potencia de empuje</div>
+    </div>
+    <div class="day-meta">
+      <div class="meta-chip">⏱ <strong>~90 min</strong></div>
+      <div class="meta-chip">🎯 <strong>Hipertrofia + Explosividad</strong></div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>⚡ Calentamiento — 10 min</strong>
+    <ul>
+      <li>5 min bici/remo ergómetro cadencia media</li>
+      <li>Rotaciones de hombro + dislocaciones con banda (2×10)</li>
+      <li>Push-ups explosivos: 2×8 (preparar SNC)</li>
+      <li>Set de activación: press con 40% del peso de trabajo ×15</li>
+    </ul>
+  </div>
+
+  <!-- BLOQUE 1 -->
+  <div class="block">
+    <div class="block-header">
+      <div class="block-num">01</div>
+      <div>
+        <div class="block-title">POTENCIA DE PECHO</div>
+        <div class="block-sub">Activación neurológica máxima · pesado y explosivo</div>
+      </div>
+      <div class="block-line"></div>
+    </div>
+    <table class="exercise-table">
+      <thead>
+        <tr>
+          <th>Ejercicio</th><th>Series</th><th>Reps / Tempo</th><th>Descanso</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="ex-name">Press de Banca con Barra</div>
+            <div class="ex-note">Bajar 3 seg, explotar arriba. Últimas 2 series al fallo · pausa 1 seg en pecho en series de hipertrofia</div>
+            <span class="badge badge-fallo">AL FALLO</span>
+            <span class="badge badge-explosivo">EXPLOSIVO</span>
+          </td>
+          <td><div class="ex-sets">3</div></td>
+          <td><div class="ex-reps">5 / 8 / 12★</div></td>
+          <td><div class="ex-rest">3 min</div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ex-name">Press Inclinado con Mancuernas</div>
+            <div class="ex-note">30–45°. Contracción máxima arriba · última serie con drop set inmediato</div>
+            <span class="badge badge-hipertrofia">HIPERTROFIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">3</div></td>
+          <td><div class="ex-reps">8 / 12 / 15★+drop</div></td>
+          <td><div class="ex-rest">2 min</div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ex-name">Aperturas en Cable (polea baja)</div>
+            <div class="ex-note">Estira máximo · cierre lento 2 seg · última serie: fallo + 5 reps parciales</div>
+            <span class="badge badge-hipertrofia">HIPERTROFIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">3</div></td>
+          <td><div class="ex-reps">12 / 15 / 20★</div></td>
+          <td><div class="ex-rest">90 seg</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BLOQUE 2 -->
+  <div class="block">
+    <div class="block-header">
+      <div class="block-num">02</div>
+      <div>
+        <div class="block-title">HOMBROS — ANCHURA MÁXIMA</div>
+        <div class="block-sub">Deltoides en los 3 haces · look NFL</div>
+      </div>
+      <div class="block-line"></div>
+    </div>
+    <table class="exercise-table">
+      <thead>
+        <tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Descanso</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="ex-name">Press de Hombros en Máquina (Shoulder Press)</div>
+            <div class="ex-note">Recorrido guiado = máximo aislamiento deltoides · series pesadas sin riesgo lumbar · explota en subida</div>
+            <span class="badge badge-potencia">POTENCIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">3</div></td>
+          <td><div class="ex-reps">6 / 10 / 15★</div></td>
+          <td><div class="ex-rest">2 min</div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ex-name">Elevaciones Laterales con Mancuerna</div>
+            <div class="ex-note">Codo ligeramente flexionado · pulgares levemente abajo · pausa 1 seg arriba</div>
+            <span class="badge badge-hipertrofia">HIPERTROFIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">3</div></td>
+          <td><div class="ex-reps">15 / 20 / 20★</div></td>
+          <td><div class="ex-rest">75 seg</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SUPERSET TRÍCEPS -->
+  <div class="block">
+    <div class="block-header">
+      <div class="block-num">03</div>
+      <div>
+        <div class="block-title">TRÍCEPS — SUPERSET</div>
+        <div class="block-sub">2 ejercicios sin descanso entre ellos</div>
+      </div>
+      <div class="block-line"></div>
+    </div>
+    <table class="exercise-table">
+      <thead>
+        <tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Descanso</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="ex-name">Fondos en paralelas (lastrado si puedes)</div>
+            <div class="ex-note">Tronco vertical para aislar tríceps · si superas 15 reps, añade lastre obligatorio</div>
+            <span class="badge badge-fallo">AL FALLO</span>
+            <span class="badge badge-potencia">POTENCIA</span>
+          </td>
+          <td><div class="ex-sets">3</div></td>
+          <td><div class="ex-reps">8 / 12 / AL FALLO★</div></td>
+          <td><div class="ex-rest" style="color:var(--gold)">↓ sin pausa</div></td>
+        </tr>
+        <tr>
+          <td colspan="4" style="padding:0">
+            <div class="superset-label">⚡ SUPERSET — sin descanso</div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ex-name">Extensión Tríceps Cable (cuerda)</div>
+            <div class="ex-note">Apertura de manos al final · última serie: fallo + 8 reps parciales de rango corto</div>
+            <span class="badge badge-hipertrofia">HIPERTROFIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">3</div></td>
+          <td><div class="ex-reps">15 / 18 / 20★</div></td>
+          <td><div class="ex-rest">90 seg</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FINISHER -->
+  <div class="finisher-box">
+    <h3>🔥 FINISHER CORE ATLÉTICO — 8 min</h3>
+    <p>
+      <strong>3 rondas sin descanso entre ejercicios, 60 seg entre rondas:</strong><br>
+      Plancha con rotación ×10 c/lado · Rollout con rueda ×10 · Russian Twist con peso ×20 · Hollow Body Hold 20 seg
+    </p>
+  </div>
+</div>
+
+<!-- ===================== MIÉRCOLES ===================== -->
+<div class="day-panel" id="miercoles">
+  <div class="day-header">
+    <div>
+      <div class="day-title">ESPALDA <span>&</span> BÍCEPS</div>
+      <div class="day-title" style="font-size:28px; color: var(--muted);">+ TRAPECIOS · CORE</div>
+      <div class="day-focus">Anchura · Grosor · Fuerza de tirón · Postura atlética</div>
+    </div>
+    <div class="day-meta">
+      <div class="meta-chip">⏱ <strong>~90 min</strong></div>
+      <div class="meta-chip">🎯 <strong>Hipertrofia + Fuerza</strong></div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>⚡ Calentamiento — 10 min</strong>
+    <ul>
+      <li>5 min remo ergómetro a ritmo moderado</li>
+      <li>Dislocaciones con PVC o banda: 2×10</li>
+      <li>Pull-apart con banda: 3×15</li>
+      <li>Dominadas de activación (negativas lentas): 2×5</li>
+    </ul>
+  </div>
+
+  <!-- BLOQUE 1 -->
+  <div class="block">
+    <div class="block-header">
+      <div class="block-num">01</div>
+      <div>
+        <div class="block-title">ANCHURA DE ESPALDA</div>
+        <div class="block-sub">Dorsal ancho · forma en V · look NFL</div>
+      </div>
+      <div class="block-line"></div>
+    </div>
+    <table class="exercise-table">
+      <thead>
+        <tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Descanso</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="ex-name">Dominadas (agarre prono, ancho)</div>
+            <div class="ex-note">Si llegas a 10 con peso corporal, añade lastre. Negativa 3 seg en cada rep</div>
+            <span class="badge badge-fallo">AL FALLO</span>
+            <span class="badge badge-potencia">POTENCIA</span>
+          </td>
+          <td><div class="ex-sets">3</div></td>
+          <td><div class="ex-reps">AL FALLO★ (cada serie)</div></td>
+          <td><div class="ex-rest">2.5 min</div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ex-name">Jalón al Pecho en Polea (agarre ancho)</div>
+            <div class="ex-note">Codos hacia abajo/atrás. Contracción 2 seg abajo · última serie con drop set</div>
+            <span class="badge badge-hipertrofia">HIPERTROFIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">3</div></td>
+          <td><div class="ex-reps">10 / 12 / 15★+drop</div></td>
+          <td><div class="ex-rest">90 seg</div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ex-name">Pull-over con Mancuerna</div>
+            <div class="ex-note">Gran estiramiento del dorsal. Esencial para caja torácica · pausa 2 seg en estiramiento</div>
+            <span class="badge badge-hipertrofia">HIPERTROFIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">3</div></td>
+          <td><div class="ex-reps">10 / 12 / 15★</div></td>
+          <td><div class="ex-rest">90 seg</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BLOQUE 2 -->
+  <div class="block">
+    <div class="block-header">
+      <div class="block-num">02</div>
+      <div>
+        <div class="block-title">GROSOR DE ESPALDA + TRAPECIO</div>
+        <div class="block-sub">Romboides · trapecio · aspecto corpulento NFL</div>
+      </div>
+      <div class="block-line"></div>
+    </div>
+    <table class="exercise-table">
+      <thead>
+        <tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Descanso</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="ex-name">Remo con Barra (agarre prono)</div>
+            <div class="ex-note">Explota en la subida, contrae omóplatos 1 seg. 3 seg bajada controlada</div>
+            <span class="badge badge-potencia">POTENCIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">3</div></td>
+          <td><div class="ex-reps">5 / 8 / 12★</div></td>
+          <td><div class="ex-rest">3 min</div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ex-name">Remo en Polea Sentado (agarre neutro)</div>
+            <div class="ex-note">Pecho afuera, codos cerca del cuerpo · contracción 2 seg</div>
+            <span class="badge badge-hipertrofia">HIPERTROFIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">4</div></td>
+          <td><div class="ex-reps">10 / 12 / 12 / 15★</div></td>
+          <td><div class="ex-rest">90 seg</div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ex-name">Encogimientos con Barra (Shrugs)</div>
+            <div class="ex-note">Hold 2 seg arriba · bajada lenta 3 seg · trapecios = cuello de toro NFL</div>
+            <span class="badge badge-hipertrofia">HIPERTROFIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">5</div></td>
+          <td><div class="ex-reps">10 / 12 / 15 / 15 / 20★</div></td>
+          <td><div class="ex-rest">75 seg</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BLOQUE 3 -->
+  <div class="block">
+    <div class="block-header">
+      <div class="block-num">03</div>
+      <div>
+        <div class="block-title">BÍCEPS — SUPERSET</div>
+        <div class="block-sub">Volumen + pico + braquial</div>
+      </div>
+      <div class="block-line"></div>
+    </div>
+    <table class="exercise-table">
+      <thead>
+        <tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Descanso</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="ex-name">Curl con Barra (o EZ-bar)</div>
+            <div class="ex-note">Codos fijos, sin balanceo · pausa 1 seg arriba · 21s en última serie (7 bajos / 7 medios / 7 completos)</div>
+            <span class="badge badge-fallo">AL FALLO</span>
+            <span class="badge badge-hipertrofia">HIPERTROFIA</span>
+          </td>
+          <td><div class="ex-sets">4</div></td>
+          <td><div class="ex-reps">8 / 10 / 10 / 21s★</div></td>
+          <td><div class="ex-rest" style="color:var(--gold)">↓ sin pausa</div></td>
+        </tr>
+        <tr>
+          <td colspan="4" style="padding:0">
+            <div class="superset-label">⚡ SUPERSET — sin descanso</div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ex-name">Curl Martillo (Hammer Curl)</div>
+            <div class="ex-note">Braquial + braquiorradial = brazo grueso completo · alternado para más rango</div>
+            <span class="badge badge-hipertrofia">HIPERTROFIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">4</div></td>
+          <td><div class="ex-reps">10 / 12 / 12 / 15★</div></td>
+          <td><div class="ex-rest">90 seg</div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ex-name">Curl en Cable (polea baja, cuerda)</div>
+            <div class="ex-note">Tensión constante · quemado final · 3 series en rest-pause (10+5+5)</div>
+            <span class="badge badge-hipertrofia">HIPERTROFIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">3</div></td>
+          <td><div class="ex-reps">10+5+5★ (rest-pause)</div></td>
+          <td><div class="ex-rest">60 seg</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FINISHER -->
+  <div class="finisher-box">
+    <h3>🔥 FINISHER POTENCIA FUNCIONAL — 8 min</h3>
+    <p>
+      <strong>3 rondas:</strong> Remo ergómetro 250m al máximo · 60 seg descanso · Farmer Walk 30m (pesado) · 60 seg descanso
+      <br><em style="font-size:12px; color:var(--muted)">Este finisher imita esfuerzos explosivos del jugador NFL entre jugadas</em>
+    </p>
+  </div>
+</div>
+
+<!-- ===================== VIERNES ===================== -->
+<div class="day-panel" id="viernes">
+  <div class="day-header">
+    <div>
+      <div class="day-title">PIERNAS <span>&</span> GLÚTEOS</div>
+      <div class="day-title" style="font-size:28px; color: var(--muted);">+ ESPALDA BAJA · POTENCIA</div>
+      <div class="day-focus">Fuerza máxima · Explosividad · Base atlética total</div>
+    </div>
+    <div class="day-meta">
+      <div class="meta-chip">⏱ <strong>~90 min</strong></div>
+      <div class="meta-chip">🎯 <strong>Potencia + Masa</strong></div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>⚡ Calentamiento — 12 min (más largo por peso alto)</strong>
+    <ul>
+      <li>5 min bici estática resistencia media</li>
+      <li>Movilidad cadera: world squat, pigeon stretch, hip circle (2×8 c/u)</li>
+      <li>Sentadilla sin peso ×20 controlada</li>
+      <li>Activación glúteo: hip thrust con banda ×20</li>
+      <li>Peso muerto con barra vacía ×10 (técnica)</li>
+    </ul>
+  </div>
+
+  <!-- BLOQUE 1 -->
+  <div class="block">
+    <div class="block-header">
+      <div class="block-num">01</div>
+      <div>
+        <div class="block-title">SENTADILLA — REINA DEL GYM</div>
+        <div class="block-sub">Fuerza total · hormonal · volumen de pierna completo</div>
+      </div>
+      <div class="block-line"></div>
+    </div>
+    <table class="exercise-table">
+      <thead>
+        <tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Descanso</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="ex-name">Sentadilla con Barra (back squat)</div>
+            <div class="ex-note">Paralela o más abajo. Explota en la subida. 4 seg bajada · 2 series de fuerza + 3 de hipertrofia</div>
+            <span class="badge badge-potencia">POTENCIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">6</div></td>
+          <td><div class="ex-reps">4 / 4 / 6 / 8 / 10 / 12★</div></td>
+          <td><div class="ex-rest">3.5 min</div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ex-name">Prensa de Pierna 45°</div>
+            <div class="ex-note">Pies altos = más glúteo/femoral. Pies bajos = más cuádriceps · última serie: fallo + 10 reps parciales</div>
+            <span class="badge badge-hipertrofia">HIPERTROFIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">5</div></td>
+          <td><div class="ex-reps">8 / 10 / 12 / 15 / 20★</div></td>
+          <td><div class="ex-rest">2.5 min</div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ex-name">Hack Squat o Sentadilla Búlgara</div>
+            <div class="ex-note">Unilateral = detecta asimetrías · pausa 1 seg abajo en cada rep</div>
+            <span class="badge badge-hipertrofia">HIPERTROFIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">4</div></td>
+          <td><div class="ex-reps">8 / 10 / 12 / 15★ c/pierna</div></td>
+          <td><div class="ex-rest">2 min</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BLOQUE 2 -->
+  <div class="block">
+    <div class="block-header">
+      <div class="block-num">02</div>
+      <div>
+        <div class="block-title">POSTERIOR — FEMORAL & GLÚTEO</div>
+        <div class="block-sub">Potencia explosiva de carrera · arranque · salto</div>
+      </div>
+      <div class="block-line"></div>
+    </div>
+    <table class="exercise-table">
+      <thead>
+        <tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Descanso</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="ex-name">Peso Muerto Rumano (RDL)</div>
+            <div class="ex-note">Estira femoral al máximo · pausa 2 seg abajo · espalda neutra siempre</div>
+            <span class="badge badge-potencia">POTENCIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">5</div></td>
+          <td><div class="ex-reps">6 / 8 / 10 / 10 / 12★</div></td>
+          <td><div class="ex-rest">2.5 min</div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ex-name">Curl Femoral en Máquina (sentado)</div>
+            <div class="ex-note">Sentado = mayor estiramiento · contracción total 2 seg · rest-pause en última serie</div>
+            <span class="badge badge-hipertrofia">HIPERTROFIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">4</div></td>
+          <td><div class="ex-reps">10 / 12 / 15 / 15★</div></td>
+          <td><div class="ex-rest">90 seg</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BLOQUE 3 -->
+  <div class="block">
+    <div class="block-header">
+      <div class="block-num">03</div>
+      <div>
+        <div class="block-title">GEMELOS + ESPALDA BAJA</div>
+        <div class="block-sub">Pierna completa · estabilidad para tenis y atletismo</div>
+      </div>
+      <div class="block-line"></div>
+    </div>
+    <table class="exercise-table">
+      <thead>
+        <tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Descanso</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="ex-name">Elevación de Talones de Pie (Gemelo)</div>
+            <div class="ex-note">Máximo rango. 1 seg arriba, 3 seg abajo · gemelos duros = potencia arranque en tenis</div>
+            <span class="badge badge-hipertrofia">HIPERTROFIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">6</div></td>
+          <td><div class="ex-reps">12 / 15 / 15 / 20 / 20 / AL FALLO★</div></td>
+          <td><div class="ex-rest">60 seg</div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ex-name">Extensión de Espalda (Hyperextension)</div>
+            <div class="ex-note">Erector espinal + glúteo · base de toda la cadena posterior · añadir disco cuando >15 reps</div>
+            <span class="badge badge-hipertrofia">HIPERTROFIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">4</div></td>
+          <td><div class="ex-reps">12 / 15 / 15 / 20★</div></td>
+          <td><div class="ex-rest">90 seg</div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ex-name">Extensión de Cuádriceps en Máquina</div>
+            <div class="ex-note">Pausa 2 seg arriba · última serie drop set inmediato para destruir el cuádriceps</div>
+            <span class="badge badge-hipertrofia">HIPERTROFIA</span>
+            <span class="badge badge-fallo">AL FALLO</span>
+          </td>
+          <td><div class="ex-sets">4</div></td>
+          <td><div class="ex-reps">12 / 15 / 20 / 20★+drop</div></td>
+          <td><div class="ex-rest">60 seg</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FINISHER -->
+  <div class="finisher-box">
+    <h3>🔥 FINISHER EXPLOSIVIDAD NFL — 8 min</h3>
+    <p>
+      <strong>4 rondas:</strong> 10 × Box Jump (máx altura) · 10 × Squat Jump sin peso · 30 seg descanso
+      <br><em style="font-size:12px; color:var(--muted)">Entrena el sistema nervioso para potencia: fuerza + velocidad = atletismo real</em>
+    </p>
+  </div>
+</div>
+
+<!-- FILOSOFÍA -->
+<div class="divider"></div>
+<div class="philosophy">
+  <h2>FILOSOFÍA DEL PROGRAMA</h2>
+  <p>Este programa está diseñado para maximizar la masa muscular sin sacrificar la capacidad atlética que requiere el tenis. Los jugadores de la NFL combinan bloques de fuerza máxima (series bajas, pesado) con volumen de hipertrofia (series altas, cercano al fallo) y trabajo explosivo para mantener el sistema nervioso activo.</p>
+  <p><strong style="color:var(--gold)">★ = Al fallo o dejando 1 repetición en el tanque (RIR 1)</strong>. El resto de series usa progresión de carga.</p>
+  <div class="principles">
+    <div class="principle">
+      <div class="principle-icon">💥</div>
+      <h4>Fallo controlado</h4>
+      <p>Las series marcadas con ★ van al fallo muscular. El resto termina con 1–2 reps en reserva para mantener técnica.</p>
+    </div>
+    <div class="principle">
+      <div class="principle-icon">⚡</div>
+      <h4>Tempo explosivo</h4>
+      <p>Bajada controlada (2–4 seg), subida explosiva. Así entrenas fuerza máxima Y potencia a la vez.</p>
+    </div>
+    <div class="principle">
+      <div class="principle-icon">🎾</div>
+      <h4>Respeto al tenis</h4>
+      <p>Lunes y miércoles sin piernas para preservar frescura en pista. El tenis es un entrenamiento pliométrico en sí mismo.</p>
+    </div>
+    <div class="principle">
+      <div class="principle-icon">📈</div>
+      <h4>Progresión semanal</h4>
+      <p>Añade 2.5–5 kg en barra cada semana que completes todas las series. En mancuernas, sube cuando domines el rango superior.</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<!-- TIMER OVERLAY -->
+<div id="timer-overlay">
+  <div id="timer-overlay-label">⏱ DESCANSANDO</div>
+  <div id="timer-overlay-ex"></div>
+  <div id="timer-overlay-time">0:00</div>
+  <div id="timer-overlay-bar"><div id="timer-overlay-bar-fill"></div></div>
+  <button id="timer-overlay-skip">Saltar descanso →</button>
+</div>
+
+<script>
+// ─── TAB SWITCHING ────────────────────────────────────────────────
+function showDay(day) {
+  document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(day).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ─── GLOBAL TIMER STATE ───────────────────────────────────────────
+let activeTimer = null;  // { interval, rowEl, total, remaining, exName, onDone }
+
+function cancelActiveTimer() {
+  if (!activeTimer) return;
+  clearInterval(activeTimer.interval);
+  if (activeTimer.rowEl) {
+    activeTimer.rowEl.classList.remove('resting');
+  }
+  activeTimer = null;
+  hideOverlay();
+}
+
+// ─── OVERLAY ──────────────────────────────────────────────────────
+const overlay       = document.getElementById('timer-overlay');
+const overlayLabel  = document.getElementById('timer-overlay-label');
+const overlayEx     = document.getElementById('timer-overlay-ex');
+const overlayTime   = document.getElementById('timer-overlay-time');
+const overlayFill   = document.getElementById('timer-overlay-bar-fill');
+const overlaySkip   = document.getElementById('timer-overlay-skip');
+
+function showOverlay(exName, totalSecs) {
+  overlayEx.textContent = exName;
+  overlayTime.classList.remove('urgent');
+  overlayFill.classList.remove('urgent');
+  overlayFill.style.transition = 'width 1s linear';
+  overlayFill.style.width = '100%';
+  overlay.classList.add('visible');
+}
+
+function updateOverlay(remaining, total) {
+  const m = Math.floor(remaining / 60);
+  const s = remaining % 60;
+  overlayTime.textContent = m + ':' + String(s).padStart(2, '0');
+  overlayFill.style.width = ((remaining / total) * 100) + '%';
+  if (remaining <= 10) {
+    overlayTime.classList.add('urgent');
+    overlayFill.classList.add('urgent');
+    overlayFill.style.transition = 'width 1s linear';
+  }
+}
+
+function hideOverlay() {
+  overlay.classList.remove('visible');
+  overlayTime.classList.remove('urgent');
+  overlayFill.classList.remove('urgent');
+}
+
+overlaySkip.addEventListener('click', () => {
+  if (activeTimer) {
+    const onDone = activeTimer.onDone;
+    cancelActiveTimer();
+    onDone();
+  }
+});
+
+// ─── REST TIMER ───────────────────────────────────────────────────
+function startRestTimer(rowEl, totalSecs, exName, onDone) {
+  // Cancel any previously running timer
+  cancelActiveTimer();
+
+  rowEl.classList.add('resting');
+  const checkEl = rowEl.querySelector('.series-check');
+  checkEl.textContent = '⏱';
+
+  let remaining = totalSecs;
+  updateOverlay(remaining, totalSecs);
+  showOverlay(exName, totalSecs);
+
+  // Inline display
+  const inlineTimer = rowEl.querySelector('.series-timer-inline');
+
+  function tick() {
+    const m = Math.floor(remaining / 60);
+    const s = remaining % 60;
+    if (inlineTimer) inlineTimer.textContent = m + ':' + String(s).padStart(2,'0');
+    updateOverlay(remaining, totalSecs);
+
+    if (remaining <= 0) {
+      clearInterval(activeTimer.interval);
+      activeTimer = null;
+      rowEl.classList.remove('resting');
+      rowEl.classList.add('done');
+      checkEl.textContent = '✓';
+      if (inlineTimer) inlineTimer.style.display = 'none';
+      hideOverlay();
+      // Beep
+      playBeep();
+      onDone();
+    }
+    remaining--;
+  }
+
+  tick();
+  const interval = setInterval(tick, 1000);
+  activeTimer = { interval, rowEl, total: totalSecs, remaining, exName, onDone };
+}
+
+// ─── SIMPLE BEEP (Web Audio API) ─────────────────────────────────
+function playBeep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [0, 0.15, 0.3].forEach((delay, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = i === 2 ? 880 : 660;
+      g.gain.setValueAtTime(0.3, ctx.currentTime + delay);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.2);
+      o.start(ctx.currentTime + delay);
+      o.stop(ctx.currentTime + delay + 0.2);
+    });
+  } catch(e) {}
+}
+
+// ─── PARSE REST TIME FROM TEXT ────────────────────────────────────
+function parseRestSecs(restText) {
+  if (!restText) return 90;
+  const t = restText.toLowerCase();
+  // "X min" or "X.X min"
+  const minMatch = t.match(/([\d.]+)\s*min/);
+  if (minMatch) return Math.round(parseFloat(minMatch[1]) * 60);
+  // "X seg"
+  const segMatch = t.match(/(\d+)\s*seg/);
+  if (segMatch) return parseInt(segMatch[1]);
+  // "↓ sin pausa" → superset, use 15 sec buffer
+  if (t.includes('sin pausa')) return 15;
+  return 90;
+}
+
+// ─── PARSE REPS LIST FROM TEXT ────────────────────────────────────
+// "5 / 8 / 12★" → ["5", "8", "12★"]
+// "AL FALLO★ (cada serie)" with sets=3 → ["AL FALLO★", "AL FALLO★", "AL FALLO★"]
+function parseRepsList(repsText, numSets) {
+  if (!repsText) return Array(numSets).fill('—');
+  // Split by " / "
+  const parts = repsText.split(/\s*\/\s*/);
+  if (parts.length >= numSets) return parts.slice(0, numSets);
+  // Single value repeated (e.g. "AL FALLO★ (cada serie)")
+  if (parts.length === 1) return Array(numSets).fill(parts[0].trim());
+  // Pad with last value
+  while (parts.length < numSets) parts.push(parts[parts.length - 1]);
+  return parts.slice(0, numSets);
+}
+
+// ─── BUILD TRACKER FOR EACH EXERCISE ROW ─────────────────────────
+function buildTrackers() {
+  document.querySelectorAll('.exercise-table tbody tr').forEach(tr => {
+    // Skip superset label rows
+    if (tr.querySelector('.superset-label')) return;
+
+    const nameTd   = tr.cells[0];
+    const setsTd   = tr.cells[1];
+    const repsTd   = tr.cells[2];
+    const restTd   = tr.cells[3];
+    if (!nameTd || !setsTd || !repsTd || !restTd) return;
+
+    const exName   = nameTd.querySelector('.ex-name')?.textContent?.trim() || 'Ejercicio';
+    const numSets  = parseInt(setsTd.querySelector('.ex-sets')?.textContent) || 3;
+    const repsText = repsTd.querySelector('.ex-reps')?.textContent?.trim() || '';
+    const restText = restTd.querySelector('.ex-rest')?.textContent?.trim() || '';
+    const restSecs = parseRestSecs(restText);
+    const repsList = parseRepsList(repsText, numSets);
+
+    // Build tracker container
+    const tracker = document.createElement('div');
+    tracker.className = 'series-tracker';
+
+    let completedSets = 0;
+
+    repsList.forEach((reps, idx) => {
+      const row = document.createElement('div');
+      row.className = 'series-row';
+
+      row.innerHTML = `
+        <div class="series-check"></div>
+        <div class="series-label">SERIE ${idx + 1}</div>
+        <div class="series-reps-tag">${reps}</div>
+        <div class="series-timer-inline"></div>
+        <button class="series-reset-btn" title="Resetear">↩</button>
+      `;
+
+      const resetBtn = row.querySelector('.series-reset-btn');
+
+      // Click row → complete serie + start rest timer
+      row.addEventListener('click', (e) => {
+        if (e.target === resetBtn) return;
+        if (row.classList.contains('done')) return;
+        if (row.classList.contains('resting')) return;
+
+        // Mark done immediately
+        completedSets++;
+        row.classList.add('done');
+        row.querySelector('.series-check').textContent = '✓';
+        updateProgress(tracker, numSets);
+
+        const isLast = completedSets >= numSets;
+
+        if (!isLast) {
+          // Start rest timer and then prompt next set
+          startRestTimer(row, restSecs, exName, () => {
+            // Flash "listo para siguiente serie" — nothing needed, timer done
+          });
+        } else {
+          // All sets done
+          const flash = tracker.querySelector('.ex-done-flash');
+          if (flash) { flash.classList.add('visible'); }
+        }
+      });
+
+      // Reset individual set
+      resetBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (activeTimer && activeTimer.rowEl === row) cancelActiveTimer();
+        row.classList.remove('done', 'resting');
+        row.querySelector('.series-check').textContent = '';
+        completedSets = Math.max(0, completedSets - 1);
+        updateProgress(tracker, numSets);
+        const flash = tracker.querySelector('.ex-done-flash');
+        if (flash) flash.classList.remove('visible');
+      });
+
+      tracker.appendChild(row);
+    });
+
+    // Progress bar
+    const progBar = document.createElement('div');
+    progBar.className = 'ex-progress-bar';
+    progBar.innerHTML = '<div class="ex-progress-fill"></div>';
+    tracker.appendChild(progBar);
+
+    // Done flash
+    const flash = document.createElement('div');
+    flash.className = 'ex-done-flash';
+    flash.textContent = '✓ TODAS LAS SERIES COMPLETADAS';
+    tracker.appendChild(flash);
+
+    nameTd.appendChild(tracker);
+  });
+}
+
+function updateProgress(tracker, total) {
+  const done = tracker.querySelectorAll('.series-row.done').length;
+  const fill = tracker.querySelector('.ex-progress-fill');
+  if (fill) fill.style.width = ((done / total) * 100) + '%';
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', buildTrackers);
+</script>
+</body>
+</html>
